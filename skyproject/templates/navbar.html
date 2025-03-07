@@ -1,9 +1,14 @@
+{% load static %}
 <div>
+  <img src="{% static 'skyhealth/logo.png' %}" alt="logo" class="logo-image">
   <h2>
     <a href="/">Home Page</a>
   </h2>
   <h2>
-    <a href="/login">Login</a>
+    <a href="{% url 'skyhealth_login'%}">Login</a>
+  </h2>
+  <h2>
+    <a href="{% url 'skyhealth_review'%}">Review</a>
   </h2>
   <hr>
 </div>

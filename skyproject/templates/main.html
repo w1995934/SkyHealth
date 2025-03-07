@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock title %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" typ="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
 {% include 'navbar.html' %}
