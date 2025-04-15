@@ -3,3 +3,4 @@
 skyproject/skyhealth/__pycache__
 skyproject/skyhealth/migrations/__pycache__
 skyproject/skyproject/__pycache__
+skyproject/db.sqlite3
