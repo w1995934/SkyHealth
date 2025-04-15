@@ -20,17 +20,6 @@ class Department(models.Model):
     def __str__(self):
         return self.depName
 
-class DepartmentLeader(models.Model):
-    fName = models.CharField(max_length=NAMELENGTH)
-    lName = models.CharField(max_length=NAMELENGTH)
-    email = models.EmailField(unique=UNIQUE)
-    username = models.CharField(max_length=NAMELENGTH, unique=UNIQUE)
-    password = models.CharField(max_length=PASSWORDLENGTH)
-    depID = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return f"{self.fName} {self.lName}"
-
 class DepartmentSummary(models.Model):
     dsSummary = models.TextField()
     date = models.DateField(auto_now_add=True)
@@ -46,28 +35,6 @@ class Team(models.Model):
     def __str__(self):
         return self.teamName
 
-class Engineer(models.Model):
-    fName = models.CharField(max_length=NAMELENGTH)
-    lName = models.CharField(max_length=NAMELENGTH)
-    email = models.EmailField(unique=UNIQUE)
-    username = models.CharField(max_length=NAMELENGTH, unique=UNIQUE)
-    password = models.CharField(max_length=PASSWORDLENGTH)
-    teamID = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return f"{self.fName} {self.lName}"
-
-class TeamLeader(models.Model):
-    fName = models.CharField(max_length=NAMELENGTH)
-    lName = models.CharField(max_length=NAMELENGTH)
-    email = models.EmailField(unique=UNIQUE)
-    username = models.CharField(max_length=NAMELENGTH, unique=UNIQUE)
-    password = models.CharField(max_length=PASSWORDLENGTH)
-    teamID = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return f"{self.fName} {self.lName}"
-
 class TeamSummary(models.Model):
     tsSummary = models.TextField()
     date = models.DateField(auto_now_add=True)
@@ -76,12 +43,22 @@ class TeamSummary(models.Model):
     def __str__(self):
         return f"Summary for Team {self.teamID} on {self.date}"
 
-class SeniorManager(models.Model):
+class User(models.Model):
+    ROLE_CHOICES = [
+        ('ENGINEER', 'Engineer'),
+        ('TEAM_LEADER', 'Team Leader'),
+        ('DEPARTMENT_LEADER', 'Department Leader'),
+        ('SENIOR_MANAGER', 'Senior Manager'),
+    ]
+
     fName = models.CharField(max_length=NAMELENGTH)
     lName = models.CharField(max_length=NAMELENGTH)
     email = models.EmailField(unique=UNIQUE)
     username = models.CharField(max_length=NAMELENGTH, unique=UNIQUE)
     password = models.CharField(max_length=PASSWORDLENGTH)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    teamID = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True)
+    depID = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.fName} {self.lName}"
@@ -90,8 +67,7 @@ class Review(models.Model):
     answer = models.IntegerField()
     date = models.DateField(auto_now_add=True)
     cardID = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True)
-    engineID = models.ForeignKey(Engineer, on_delete=models.SET_NULL, null=True)
-    teamLeadID = models.ForeignKey(TeamLeader, on_delete=models.SET_NULL, null=True)
+    userID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"Review for Card {self.cardID} by Engineer {self.engineID}"
+        return f"Review for Card {self.cardID} by User {self.userID}"
