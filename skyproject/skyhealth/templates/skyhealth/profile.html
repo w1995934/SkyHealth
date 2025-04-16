@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Sky Home
+{% endblock title %}
+
+{% block content %}
+<div>
+    <h1>Profile page</h1>
+</div>
+<div>
+    <h1>{{ profile.user.username }}</h1>
+    <p><strong>First Name: </strong> {{ profile.user.first_name }}</p>
+    <p><strong>Last Name: </strong> {{ profile.user.last_name }}</p>
+    <p><strong>Email: </strong> {{ profile.user.email }}</p>
+    <p><strong>Role: </strong> {{ profile.role }}</p>
+</div>
+<div>
+    <small>
+        <a href="{% url 'skyhealth_updateprofile' %}">Update Profile</a>
+    </small>
+</div>
+{% endblock content %}

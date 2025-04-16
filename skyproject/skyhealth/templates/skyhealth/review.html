@@ -12,7 +12,7 @@ Sky Review
 
 {% for card in cards %}
 <div>
-<h5>{{card.id}} -- <a href="{% url 'skyhealth_card' card.id %}">{{card.name}}</a></h5>
+    <h5>{{card.id}} -- <a href="{% url 'skyhealth_card' card.id %}">{{card.cardTitle}}</a></h5>
 </div>
 {% endfor %}
 

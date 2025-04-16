@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Sky Sign Up
+{% endblock title %}
+
+{% block content %}
+<div>
+    <h1>Sign Up Page</h1>
+    <p>This is the Sky Health Sign Up</p>
+</div>
+
+<div>
+    <h1>register</h1>
+</div>
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Register</legend>
+            {{ form.as_p }}
+        </fieldset>
+        <div>
+            <button type="submit">Sign up</button>
+        </div>
+    </form>
+    <div>
+        <small>Already have an account?</small>
+        <a href="{% url 'skyhealth_login' %}">Sign In</a>
+    </div>
+</div>
+
+{% endblock content %}

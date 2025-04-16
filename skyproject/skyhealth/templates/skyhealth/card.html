@@ -4,14 +4,14 @@
 Card
 {% endblock title %}
 
-{% block content %}
+{% block content%}
 <div>
     <h1>Card Page</h1>
 </div>
 
 <div>
-  <p>
-    {{card.name}}
-  </p>
+    <h3>Card Name:{{card.cardTitle}} </h3>
+    <h4>Card Description: {{card.cardDetail}} </h4>
 </div>
+
 {% endblock content %}

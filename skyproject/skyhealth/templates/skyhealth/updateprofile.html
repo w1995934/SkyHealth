@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Sky Home
+{% endblock title %}
+
+{% block content %}
+<div>
+    <h1>Profile page</h1>
+</div>
+<div>
+    <form method="post">
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>User Information</legend>
+            {{ user_form.as_p }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Profile Information</legend>
+            {{ profile_form.as_p }}
+        </fieldset>
+
+        <button type="submit">Update Profile</button>
+    </form>
+</div>
+{% endblock content %}

@@ -9,4 +9,20 @@ Sky Login
     <h1>Login Page</h1>
     <p>This is the Sky Health Login Page</p>
 </div>
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Log In</legend>
+            {{ form.as_p }}
+            <button type="submit">Login</button>
+        </fieldset>
+    </form>
+    <div>
+        <small>
+            Need An Account? <a href="{% url 'skyhealth_signup' %}">Sign Up Now</a>
+        </small>
+    </div>
+</div>
+
 {% endblock content %}

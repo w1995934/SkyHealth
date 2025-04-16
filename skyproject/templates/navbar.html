@@ -1,14 +1,33 @@
 {% load static %}
 <div>
-  <img src="{% static 'skyhealth/logo.png' %}" alt="logo" class="logo-image">
-  <h2>
-    <a href="/">Home Page</a>
-  </h2>
-  <h2>
-    <a href="{% url 'skyhealth_login'%}">Login</a>
-  </h2>
-  <h2>
-    <a href="{% url 'skyhealth_review'%}">Review</a>
-  </h2>
-  <hr>
+    <img src="{% static 'skyhealth/logo.png' %}" alt="logo" class="logo-image">
+    <h2>
+        <a href="/">Home Page</a>
+    </h2>
+    {% if user.is_authenticated %}
+        {% if user.profile.role == 'SERVER_ADMIN' %}
+            <h2>
+                <a href="/admin">Admin Panel</a>
+            </h2>
+        {% else %}
+            <h2>
+                <a href="{% url 'skyhealth_review'%}">Review</a>
+            </h2>
+        {% endif %}
+        <h2>
+            <a href="{% url 'skyhealth_profile_view' user.username%}">Profile</a>
+        </h2>
+        <h2>
+            <a href="{% url 'skyhealth_logout'%}">Logout</a>
+        </h2>
+    {% else %}
+        <h2>
+            <a href="{% url 'skyhealth_login'%}">Login</a>
+        </h2>
+        <h2>
+            <a href="{% url 'skyhealth_signup'%}">Sign Up </a>
+        </h2>
+    {% endif %}
+
+    <hr>
 </div>
