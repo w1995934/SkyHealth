@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
 from .forms import UserForm, ProfileForm
@@ -63,3 +64,8 @@ def updateprofile(request):
     'user_form': user_form,
     'profile_form': profile_form
     })
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, "You Were Logged Out!")
+    return redirect('skyhealth_home')
