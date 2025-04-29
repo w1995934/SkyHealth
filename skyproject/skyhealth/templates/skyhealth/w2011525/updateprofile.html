@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>SkyCare Profile</title>
-  <style>
+{% extends 'main.html' %}
+
+{% block title %}
+SkyCare Profile
+{% endblock title %}
+
+{% block extrastyle %}
+<style>
     * {
       margin: 0;
       padding: 0;
@@ -42,7 +44,7 @@
 
     .profile-pic-container {
   position: relative;
-  margin: 0 auto 20px; 
+  margin: 0 auto 20px;
   display: flex;
   justify-content: center;
 }
@@ -164,57 +166,66 @@
       transform: translateX(14px);
     }
 
-  </style>
-</head>
-<body>
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
 
-  <img src="img/home.png" alt="Home" class="home" />
+    .button {
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
 
-  <div class="profile-section">
-    <img src="img/sky-logo.png" alt="SkyCare Logo" class="logo" />
+    .button:hover {
+      background-color: #555;
+    }
+
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+{% load static %}
+<div class="profile-section">
+    <img src="{% static 'w2011525/sky-logo.png' %}" alt="SkyCare Logo" class="logo"/>
 
     <div class="profile-pic-container">
-      <img src="img/blank-profile-picture.webp" alt="Profile Picture" class="profile-pic" />
-      <img src="img/editIcon.png" alt="Edit" class="edit-icon" />
+        <img src="{% static 'w2011525/blank-profile-picture.webp' %}" alt="Profile Picture" class="profile-pic"/>
+        <img src="{% static 'w2011525/editIcon.png' %}" alt="Edit" class="edit-icon"/>
     </div>
 
-    <form>
-      <div class="input-group">
-        <label for="fullname">Full name</label>
-        <input type="text" id="fullname" placeholder="Full name" />
-        <img src="img/editIcon.png" alt="Edit" class="edit-icon-inline" />
-      </div>
+    <form method="post">
+        {% csrf_token %}
 
-      <div class="input-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Email" />
-        <img src="img/editIcon.png" alt="Edit" class="edit-icon-inline" />
-      </div>
-
-      <div class="input-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Password" />
-        <img src="img/editIcon.png" alt="Edit" class="edit-icon-inline" />
-      </div>
-
-      <div class="input-group">
-        <label for="department">Department</label>
-        <input type="text" id="department" placeholder="Department" />
-        <img src="img/editIcon.png" alt="Edit" class="edit-icon-inline" />
-      </div>
-
-      <div class="toggle-container">
-        <div class="toggle-info">
-          <strong>Notification Preferences</strong>
-          <span>email reminders for upcoming sessions, progress updates</span>
+        <div class="input-group">
+            <label for="first_name">First name</label>
+            <input type="text" name="first_name" id="first_name" placeholder="First Name"
+                   value="{{ user.first_name }}"/>
+            <img src="{% static 'w2011525/editIcon.png' %}" alt="Edit" class="edit-icon-inline"/>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" />
-          <span class="slider"></span>
-        </label>
-      </div>
-    </form>
-  </div>
 
-</body>
-</html>
+        <div class="input-group">
+            <label for="last_name">Last name</label>
+            <input type="text" name="last_name" id="last_name" placeholder="Last Name" value="{{ user.last_name }}"/>
+            <img src="{% static 'w2011525/editIcon.png' %}" alt="Edit" class="edit-icon-inline"/>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email" value="{{ user.email }}"/>
+            <img src="{% static 'w2011525/editIcon.png' %}" alt="Edit" class="edit-icon-inline"/>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="button">Update Profile</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

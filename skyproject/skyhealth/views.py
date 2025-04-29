@@ -1,4 +1,5 @@
 from django.contrib.auth import logout
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 
 from .forms import UserForm, CreateUserForm
@@ -13,8 +14,14 @@ def home(request):
     return render(request, 'skyhealth/home.html')
 
 # Login Page, Uses Django's built-in functionality
-def login(request):
-    return render(request, 'skyhealth/login.html')
+# If User is already logged in, then they will be redirected to the homepage
+class CustomLoginView(LoginView):
+    template_name = 'skyhealth/w2011525/login.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('skyhealth_home')
+        return super().dispatch(request, *args, **kwargs)
 
 # User Register Page
 def signup(request):
@@ -34,7 +41,7 @@ def signup(request):
     else:
         # Returns an empty form to create user
         form = CreateUserForm()
-    return render(request, 'skyhealth/signup.html', {'form': form})
+    return render(request, 'skyhealth/w2011525/register.html', {'form': form})
 
 # Displays all cards that a User can create a review for
 # Requires User to be logged in
@@ -57,17 +64,16 @@ def card(request, id):
 # View Users information, and is only able to view their own
 # Requires User to be logged in
 @login_required
-def profile_view(request, username):
-    profile = Profile.objects.get(user__username=username)
-
-    if  request.user.username != username:
-        return redirect('skyhealth_home')
+def profile_view(request):
+    profile = Profile.objects.get(user__username=request.user.username)
     return render(request, 'skyhealth/profile.html', {'profile': profile})
 
 # Allows the User to Update their information
 # Requires User to be logged in
 @login_required
 def updateprofile(request):
+    updateprofilehtml = 'skyhealth/w2011525/updateprofile.html'
+
     if request.method == 'POST':
         # Validate POST request is valid
         user_form = UserForm(request.POST, instance=request.user)
@@ -80,7 +86,7 @@ def updateprofile(request):
         # Validate that fields are not empty
         if not first_name or not last_name or not email:
             messages.error(request, "Fields cannot be empty.")
-            return render(request, 'skyhealth/updateprofile.html', {'user_form': user_form})
+            return render(request, updateprofilehtml, {'user_form': user_form})
 
         if user_form.is_valid():
             user_form.save()
@@ -91,7 +97,7 @@ def updateprofile(request):
     else:
         # Returns the form with the users information
         user_form = UserForm(instance=request.user)
-    return render(request, 'skyhealth/updateprofile.html', {'user_form': user_form,})
+    return render(request, updateprofilehtml, {'user_form': user_form,})
 
 # Logout user and redirects them to the Home screen with a message
 # Requires User to be logged in

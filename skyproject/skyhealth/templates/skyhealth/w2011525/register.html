@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyCare Register</title>
-  <style>
+{% extends 'main.html' %}
+
+{% block title %}
+SkyCare Register
+{% endblock title %}
+
+{% block extrastyle %}
+<style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -47,7 +48,7 @@
       background-color: #fdaedf;
       padding: 30px 40px;
       border-radius: 8px;
-     
+
       min-width: 300px;
     }
 
@@ -107,44 +108,39 @@
       margin: 0 auto 10px auto;
       width: 130px;
     }
-  </style>
-</head>
-<body>
-  <div class="hero-form">
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+{% load static %}
+<div class="hero-form">
     <div class="text-content-title">
-      <div class="title">
-        
-        <img src="img/sky-logo.png" alt="SkyCare Logo" class="logo" />
-      </div>
-      <div class="subtitle">Register</div>
+        <div class="title">
+            <img src="{% static 'w2011525/sky-logo.png' %}" alt="SkyCare Logo" class="logo"/>
+        </div>
+        <div class="subtitle">Register</div>
     </div>
-    <form class="form-contact">
-      <div class="input-field">
-        <label for="fullname">Full Name</label>
-        <input id="fullname" type="text" placeholder="Full Name" required />
-      </div>
-
-      <div class="input-field">
-        <label for="department">Department</label>
-        <input id="department" type="text" placeholder="Department" required />
-      </div>
-
-      <div class="input-field">
-        <label for="email">Email</label>
-        <input id="email" type="email" placeholder="Email" required />
-      </div>
-
-      <div class="textarea-field">
-        <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Password" required />
-      </div>
-      <div class="textarea-field">
-        <label for="password"> Second Password</label>
-        <input id="password" type="password" placeholder=" Second Password" required />
-      </div>
-
-      <button type="submit" class="button">Register</button>
-    </form>
-  </div>
-</body>
-</html>
+    <div class="form-contact">
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="input-field">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <small>{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="button">Register</button>
+        </form>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <small>Already have an account?</small>
+        <a href="{% url 'skyhealth_login' %}">Sign In</a>
+    </div>
+</div>
+{% endblock content %}

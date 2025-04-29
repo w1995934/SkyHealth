@@ -5,18 +5,20 @@
     <title>{% block title %}{% endblock title %}</title>
 
     {% load static %}
-    <link rel="stylesheet" typ="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    {% block extrastyle %}{% endblock extrastyle %}
+
 </head>
 <body>
 {% include 'navbar.html' %}
 
 {% if messages %}
-{% for message in messages %}
-<div>
-    {{ message }}
-</div>
-{% endfor %}
-<hr>
+<script>
+    {% for message in messages %}
+    alert("{{ message }}");
+    {% endfor %}
+</script>
 {% endif %}
 
 {% block content %}
