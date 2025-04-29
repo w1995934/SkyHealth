@@ -38,7 +38,10 @@ def review(request):
 
 @login_required
 def card(request, id):
-    context = {'card': Card.objects.get(id=id)}
+    card = Card.objects.get(id=id)
+    split_description = [part.strip() for part in card.cardDetail.split('Or.') if part.strip()]
+    context = {'card': card,
+               'split_description': split_description}
     return render(request, 'skyhealth/card.html', context)
 
 @login_required

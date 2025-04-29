@@ -11,7 +11,10 @@ Card
 
 <div>
     <h3>Card Name:{{card.cardTitle}} </h3>
-    <h4>Card Description: {{card.cardDetail}} </h4>
+    <h4>Card Description:</h4>
+        {% for part in split_description %}
+            <div>{{ part }}</div>
+        {% endfor %}
 </div>
 
 {% endblock content %}
