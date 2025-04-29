@@ -1,0 +1,26 @@
+.team-detail-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    color: white;
+}
+
+.leader-info, .team-members {
+    background-color: #4b1e7f;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.team-members ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.team-members li {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #5f0f4e;
+    border-radius: 4px;
+}

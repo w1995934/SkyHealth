@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ leader.team_name }} Details</title>
+    <link rel="stylesheet" href="Main.css">
+    <link rel="stylesheet" href="team_detail.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navigation">
+            <ul>
+                <img src="Skylogo.png" class="logo">
+                <h1 class="LogoText">Health</h1>
+                <li><a href="">Home</a></li>
+                <li><a href="">Login</a></li>
+                <li><a href="">User Profile</a></li>
+                <li><a href="">Admin</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="team-detail-container">
+        <h1>{{ leader.team_name }}</h1>
+        <div class="leader-info">
+            <h2>Team Leader</h2>
+            <p>Name: {{ leader.user.get_full_name }}</p>
+            <p>Email: {{ leader.user.email }}</p>
+        </div>
+
+        <div class="team-members">
+            <h2>Team Members</h2>
+            <ul>
+                {% for member in leader.team.members.all %}
+                <li>{{ member.get_full_name }}</li>
+                {% empty %}
+                <li>No members assigned yet</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
