@@ -1,0 +1,41 @@
+.team-summary-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.leaders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.leader-card {
+    background-color: #4b1e7f;
+    border-radius: 8px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.leader-card h3 {
+    margin-top: 0;
+    color: #a8d0e6;
+}
+
+.leader-card button {
+    background-color: #310e68;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.leader-card button:hover {
+    background-color: #5f0f4e;
+}
