@@ -9,6 +9,6 @@ urlpatterns = [
     path('signup/', views.signup, name="skyhealth_signup"),
     path('profile/<str:username>/', views.profile_view, name="skyhealth_profile_view"),
     path('updateprofile/', views.updateprofile, name="skyhealth_updateprofile"),
-    path('review/', views.review, name="skyhealth_review"),
-    path('review/card/<int:id>/', views.card, name="skyhealth_card"),
+    path('cards/', views.cards, name="skyhealth_cards"),
+    path('cards/<int:id>/', views.card, name="skyhealth_card"),
 ]
