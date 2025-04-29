@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 # Home Page for app, accessible for all users
 def home(request):
-    return render(request, 'skyhealth/home.html')
+    return render(request, 'skyhealth/w1995934/home.html')
 
 # Login Page, Uses Django's built-in functionality
 # If User is already logged in, then they will be redirected to the homepage
