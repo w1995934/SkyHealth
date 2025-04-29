@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
-from .forms import UserForm, ProfileForm
+from .forms import UserForm, CreateUserForm
 from .models import Card, Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -20,14 +20,14 @@ def login(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
-            return redirect('skyhealth_home')
+            return redirect('skyhealth_login')
     else:
-        form = UserCreationForm()
+        form = CreateUserForm()
     return render(request, 'skyhealth/signup.html', {'form': form})
 
 @login_required
@@ -49,13 +49,12 @@ def profile_view(request, username):
     profile = Profile.objects.get(user__username=username)
     return render(request, 'skyhealth/profile.html', {'profile': profile})
 
+@login_required
 def updateprofile(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user_form.save()
-            profile_form.save()
             messages.success(request, f'Your profile was successfully updated!')
             return redirect('skyhealth_home')
         else:
@@ -63,11 +62,9 @@ def updateprofile(request):
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
-    return render(request, 'skyhealth/updateprofile.html', {
-    'user_form': user_form,
-    'profile_form': profile_form
-    })
+    return render(request, 'skyhealth/updateprofile.html', {'user_form': user_form,})
 
+@login_required
 def logout_user(request):
     logout(request)
     messages.success(request, "You Were Logged Out!")
