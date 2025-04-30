@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>SkyCare Profile</title>
-  <style>
+{% extends 'main.html' %}
+
+{% block title %}
+SkyCare Profile
+{% endblock title %}
+
+{% block extrastyle %}
+<style>
     * {
       margin: 0;
       padding: 0;
@@ -16,7 +18,7 @@
       display: flex;
       justify-content: center;
       align-items: start;
-      padding-top: 40px;
+      padding-top: 100px;
       min-height: 100vh;
     }
 
@@ -134,49 +136,53 @@
     .toggle-switch input:checked + .slider:before {
       transform: translateX(14px);
     }
-    
 
-  </style>
-</head>
-<body>
 
-  <img src="img/home.png" alt="Home" class="home" />
+</style>
+{% endblock extrastyle %}
 
-  <div class="profile-section">
-    <img src="img/sky-logo.png" alt="SkyCare Logo" class="logo" />
+{% block content %}
+{% load static %}
+<div class="profile-section">
+    <img src="{% static 'w2011525/sky-logo.png' %}" alt="SkyCare Logo" class="logo"/>
 
     <div class="profile-pic-container">
-      <img src="img/blank-profile-picture.webp" alt="Profile Picture" class="profile-pic" />
+        <img src="{% static 'w2011525/blank-profile-picture.webp' %}" alt="Profile Picture" class="profile-pic"/>
     </div>
 
     <div class="info-group">
-      <label>Full Name</label>
-      <p id="name">...</p>
+        <label>Full Name</label>
+        <p id="name">{{profile.user.get_full_name}}</p>
     </div>
 
     <div class="info-group">
-      <label>Email</label>
-      <p id="email">...</p>
+        <label>Email</label>
+        <p id="email">{{ profile.user.email }}</p>
     </div>
 
     <div class="info-group">
-      <label>Department</label>
-      <p id="department">...</p>
+        <label>Role</label>
+        <p id="Role">{{ role }}</p>
     </div>
 
-    <div class="toggle-container">
-      <div class="toggle-info">
-        <strong>Notification Preferences</strong><br />
-        <span>Email reminders for sessions and updates</span>
-      </div>
-      <label class="toggle-switch">
-        <input type="checkbox" id="notificationToggle" checked />
-        <span class="slider"></span>
-      </label>
+    {% if profile.teamID %}
+    <div class="info-group">
+        <label>Team</label>
+        <p id="Team">{{ profile.teamID }}</p>
     </div>
-  </div>
+    {% endif %}
 
-  
+    {% if profile.depID %}
+    <div class="info-group">
+        <label>Department</label>
+        <p id="Department">{{ profile.depID }}</p>
+    </div>
+    {% endif %}
 
-</body>
-</html>
+    <div>
+        <small>
+            <a href="{% url 'skyhealth_updateprofile' %}">Update Profile</a>
+        </small>
+    </div>
+</div>
+{% endblock content %}

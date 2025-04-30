@@ -4,7 +4,7 @@ from django.db.models import Avg
 from django.shortcuts import render, redirect
 
 from .forms import UserForm, CreateUserForm, CreateReviewForm
-from .helper import split_card_description
+from .helper import *
 from .models import Card, Profile, Review
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -68,7 +68,7 @@ def card(request, id):
 @login_required
 def profile_view(request):
     profile = Profile.objects.get(user=request.user)
-    return render(request, 'skyhealth/profile.html', {'profile': profile})
+    return render(request, 'skyhealth/w2011525/profile.html', {'profile': profile, 'role': role_display_names(profile.role)})
 
 # Allows the User to Update their information
 # Requires User to be logged in
