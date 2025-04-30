@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from .forms import UserForm, CreateUserForm, CreateReviewForm
 from .helper import *
-from .models import Card, Profile, Review, Team
+from .models import Card, Profile, Review, Team, Department
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -216,8 +216,9 @@ def teams_summary(request, department_id):
         messages.warning(request, "You can not see this page.")
         return redirect('skyhealth_home')
 
-    # If a team leader
-    if not profile.teamID:
+    # Senior Managers and Department leaders are able to view the page even without a team id
+    # if not a both roles, the team leader has to be in a team to view other teams reviews
+    if profile.role not in ['SENIOR_MANAGER', 'DEPARTMENT_LEADER'] and not profile.teamID:
         messages.warning(request, "You currently are not in a Team.")
         return redirect('skyhealth_home')
 
@@ -293,3 +294,35 @@ def team_detail(request, team_id):
     }
 
     return render(request, 'skyhealth/w1995934/team_detail.html', context)
+
+
+# The Displays all departments and its information on the webpage
+# Requires User to be logged in and to not be a engineer
+@login_required
+def department_overview(request):
+    profile = Profile.objects.get(user=request.user)
+
+    # Validate the user is not an engineer or team leader
+    if profile.role in ['ENGINEER', 'TEAM_LEADER']:
+        messages.warning(request, "You don't have permission to view this page.")
+        return redirect('skyhealth_home')
+
+    # Get all departments with their managers
+    departments = Department.objects.all()
+    department_data = []
+
+    # Get the information of department and its department leader
+    for department in departments:
+        # Find department manager for this department
+        manager = Profile.objects.filter(
+            depID=department,
+            role='DEPARTMENT_LEADER'
+        ).first()
+
+        # Add departent data to the list
+        department_data.append({
+            'department': department,
+            'manager': manager.user if manager else None
+        })
+
+    return render(request, 'skyhealth/w1926950/seniormanager.html', {'department_data': department_data})

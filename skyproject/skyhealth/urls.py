@@ -14,4 +14,5 @@ urlpatterns = [
     path('reviews/<int:card_id>/create/', views.create_review, name="skyhealth_create_review"),
     path('teams/<int:department_id>/', views.teams_summary, name="skyhealth_teams_summary"),
     path('teams/summary/<int:team_id>/', views.team_detail, name="skyhealth_team_detail"),
+    path('overview/', views.department_overview, name="skyhealth_department_overview")
 ]
