@@ -1,41 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SkyHealth - Team Summary</title>
-    <link rel="stylesheet" href="Main.css">
-    <link rel="stylesheet" href="teamsum.css">
-</head>
-<body>
-<div class="container">
-    <nav class="navigation">
-        <ul>
-            <img src="Skylogo.png" class="logo">
-            <h1 class="LogoText">Health</h1>
-            <li><a href="">Home</a></li>
-            <li><a href="">Login</a></li>
-            <li><a href="">User Profile</a></li>
-            <li><a href="">Admin</a></li>
-        </ul>
-    </nav>
-</div>
+{% extends 'main.html' %}
 
+{% block title %}
+Teams Summary
+{% endblock title %}
+
+{% block extracss %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'w1995934/Main.css' %}">
+<link rel="stylesheet" href="{% static 'w1995934/teamsum.css' %}">
+{% endblock extracss %}
+
+
+{% block content %}
 <div class="team-summary-container">
-    <h1>Team Leaders</h1>
+    <h1>Teams in Department: {{department.depName}}</h1>
 
     <div class="leaders-grid">
-        {% for leader in leaders %}
+        {% for item in team_data %}
         <div class="leader-card">
-            <h3>{{ leader.team_name }}</h3>
-            <p>Leader: {{ leader.user.get_full_name }}</p>
-            <button onclick="location.href='{% url 'team_detail' leader.id %}'">
+            <h3>Team: {{ item.team.teamName }}</h3>
+            <p>
+                {% if item.leader %}
+                <span> Team Leader: {{ item.leader.get_full_name }}</span>
+                {% else %}
+                <span>No leader assigned</span>
+                {% endif %}
+            </p>
+            <button onclick="location.href=''">
                 View Summary
             </button>
         </div>
-        {% empty %}
         {% endfor %}
     </div>
 </div>
-</body>
-</html>
+{% endblock content %}

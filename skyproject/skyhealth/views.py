@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from .forms import UserForm, CreateUserForm, CreateReviewForm
 from .helper import *
-from .models import Card, Profile, Review
+from .models import Card, Profile, Review, Team
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -139,6 +139,8 @@ def reviews(request):
 
     return render(request, 'skyhealth/reviews.html', {'cards': cards, 'average_rating': average_rating})
 
+# The webpage where engineers and team leaders are able to make or edit reviews for
+# Requires User to be logged in
 @login_required
 def create_review(request, card_id):
     # Get the User object
@@ -191,8 +193,48 @@ def create_review(request, card_id):
         form = CreateReviewForm(initial=initial)
 
     # Returns the card and its split description and review information and also the form
-    return render(request, 'skyhealth/createreview.html', {
+    return render(request, 'skyhealth/w1926950/createreview.html', {
         'card': card,
         'split_description': split_description,
         'form': form,
         'existing_review': existing_review})
+
+# The webpage displays all the teams in a department
+# Requires User to be logged in and to not be a engineer
+@login_required
+def teams_summary(request):
+    # Get User object
+    profile = Profile.objects.get(user=request.user)
+
+    # Stops engineers from accessing the page
+    if profile.role == 'ENGINEER':
+        messages.warning(request, "You can not see this page.")
+        return redirect('skyhealth_home')
+
+    # If a team leader
+    if not profile.teamID:
+        messages.warning(request, "You currently are not in a Team.")
+        return redirect('skyhealth_home')
+
+    # Get the Department from the users ID team ID
+    department = profile.teamID.depID
+
+    # Get all the teams that are under than department
+    teams = Team.objects.filter(depID=department)
+
+    # Gets all the data from each team, the team Name and its Team Leader
+    team_data = []
+    for team in teams:
+        # Find team leader for this team
+        leader = Profile.objects.filter(
+            teamID=team,
+            role='TEAM_LEADER'
+        ).first()
+
+        # Add the team information to the team data list
+        team_data.append({
+            'team': team,
+            'leader': leader.user if leader else None
+        })
+
+    return render(request, 'skyhealth/w1995934/TeamPage.html', {'team_data': team_data, 'department': department})

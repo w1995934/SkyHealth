@@ -4,6 +4,12 @@
 SkyCare Survey
 {% endblock title %}
 
+{% block extrastyle %}
+body{
+    padding-top: 100px;
+}
+{% endblock extrastyle %}
+
 {% block extracss %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'w1926950/style.css' %}"/>
@@ -12,11 +18,11 @@ SkyCare Survey
 {% block content %}
 <div class="container">
     <h2>
-      <h1>Review for: {{card.cardTitle}}</h1>
-    <h2>Card Description:</h2>
-    {% for part in split_description %}
-    <ul>{{ part }}</ul>
-    {% endfor %}
+        <h1>Review for: {{card.cardTitle}}</h1>
+        <h2>Card Description:</h2>
+        {% for part in split_description %}
+        <ul>{{ part }}</ul>
+        {% endfor %}
     </h2>
 
     <form id="surveyForm" method="POST">
@@ -43,12 +49,10 @@ SkyCare Survey
                 <div class="bar-segment low"></div>
             </div>
         </div>
-
-<!--        <input type="hidden" name="question_id" value="1"/>-->
-
+<!--    <input type="hidden" name="question_id" value="1"/>-->
         <div class="navigation">
             <button type="submit">Submit</button>
-<!--            <button type="button" onclick="goToNext()">&rarr;</button>-->
+<!--        <button type="button" onclick="goToNext()">&rarr;</button>-->
         </div>
     </form>
 </div>

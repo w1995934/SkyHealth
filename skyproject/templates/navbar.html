@@ -13,7 +13,13 @@
         <h2 class="navbar-item">
             <a href="/admin">Admin Panel</a>
         </h2>
-        {% else %}
+        {% endif %}
+        {% if user.profile.role == 'TEAM_LEADER' %}
+        <h2 class="navbar-item">
+            <a href="{% url 'skyhealth_teams_summary'%}">Teams Summary</a>
+        </h2>
+        {% endif %}
+        {% if user.profile.role == 'ENGINEER' or user.profile.role == 'TEAM_LEADER' %}
         <h2 class="navbar-item">
             <a href="{% url 'skyhealth_cards'%}">Cards</a>
         </h2>
