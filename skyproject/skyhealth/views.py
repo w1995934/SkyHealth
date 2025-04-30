@@ -142,7 +142,7 @@ def reviews(request):
     else:
         average_rating = None
 
-    return render(request, 'skyhealth/reviews.html', {'cards': cards, 'average_rating': average_rating})
+    return render(request, 'skyhealth/w1926950/Dashboard.html', {'cards': cards, 'average_rating': average_rating})
 
 # The webpage where engineers and team leaders are able to make or edit reviews for
 # Requires User to be logged in
@@ -304,7 +304,7 @@ def department_overview(request):
 
     # Validate the user is not an engineer or team leader
     if profile.role in ['ENGINEER', 'TEAM_LEADER']:
-        messages.warning(request, "You don't have permission to view this page.")
+        messages.warning(request, "You do not have permission to view this page.")
         return redirect('skyhealth_home')
 
     # Get all departments with their managers

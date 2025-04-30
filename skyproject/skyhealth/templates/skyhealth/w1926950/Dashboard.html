@@ -1,80 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SkyCare Dashboard</title>
-  <link rel="stylesheet" href="dashboard.css" />
-</head>
-<body>
-  <div class="dashboard">
-    <header>
-      <img src="sky-logo.png" alt="SkyCare Logo" class="logo" />
-      <div class="icons">
-        <div class="user-icon">👤</div>
-        <div class="home-icon">🏠</div>
-      </div>
-    </header>
+{% extends 'main.html' %}
 
+{% block title %}
+Overview
+{% endblock title %}
+
+{% block extracss %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'w1926950/dashboard.css' %}"/>
+{% endblock extracss %}
+
+{% block extrastyle %}
+<style>
+    body{
+        padding-top: 40px
+    }
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="dashboard">
     <main>
-      <div class="grid-section">
-        <div class="card">
-          <p>Are we effectively delivering meaningful value to our users/ customers with each release?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Do you enjoy working with your team and find your work engaging?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Is our codebase maintainable, scalable, and free of major technical debt?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Are we continuously learning and improving our skills as a team?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Do we have a clear mission, and do we feel connected to it?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Are we able to deliver work at a sustainable and efficient pace?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Do we have the support we need from leadership, tools, and processes?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Do we collaborate effectively and support each other as a team?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Do we have a say in decisions, or are we just following orders?</p>
-          <div class="emoji">😊</div>
-        </div>
-        <div class="card">
-          <p>Are our processes effective and helping us work efficiently?</p>
-          <div class="emoji">😊</div>
-        </div>
-      </div>
+        <div class="grid-section">
+            {% for card in cards %}
+            <a href="{% url 'skyhealth_create_review' card.id %}">
+                <div class="card">
+                    <h1>{{card.cardTitle}}</h1>
+                    <div class="emoji">😊</div>
+                </div>
+            </a>
+            {% endfor %}
 
-      <div class="results-section">
-        <div class="pie"></div>
-        <div class="comments">
-          <h4>Comments about Pie chart.</h4>
-          <p>
-            This pie chart represents a 100% Green rating, indicating that all team members have voted positively on the health check cards. This means the team is in excellent condition, with no reported concerns. Productivity, collaboration, and overall workflow are running smoothly with no critical issues.
-          </p>
+<!--            <div class="results-section">-->
+<!--                <div class="pie"></div>-->
+<!--                <div class="comments">-->
+<!--                    <h4>Comments about Pie chart.</h4>-->
+<!--                    <p>-->
+<!--                        This pie chart represents a 100% Green rating, indicating that all team members have voted-->
+<!--                        positively on the health check cards. This means the team is in excellent condition, with no-->
+<!--                        reported concerns. Productivity, collaboration, and overall workflow are running smoothly with-->
+<!--                        no critical issues.-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
-      </div>
     </main>
-
-    <footer>
-      <button class="change-btn">Change</button>
-      <div class="next-icon">🔄</div>
-    </footer>
-  </div>
-</body>
-</html>
+</div>
+{% endblock content %}
