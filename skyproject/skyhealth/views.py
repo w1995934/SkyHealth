@@ -239,7 +239,7 @@ def teams_summary(request, department_id):
             'leader': leader.user if leader else None
         })
 
-    return render(request, 'skyhealth/w1995934/TeamPage.html', {'team_data': team_data, 'department': department})
+    return render(request, 'skyhealth/w1995934/TeamPage.html', {'team_data': team_data, 'department': department_id})
 
 # The webpage displays all teams memebers, rating, number of green,amber and red rating, and the team leaders information
 # Requires User to be logged in and to not be a engineer
