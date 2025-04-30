@@ -26,7 +26,7 @@ Teams Summary
                 <span>No leader assigned</span>
                 {% endif %}
             </p>
-            <button onclick="location.href=''">
+            <button onclick="location.href='{% url 'skyhealth_team_detail' item.team.id %}'">
                 View Summary
             </button>
         </div>

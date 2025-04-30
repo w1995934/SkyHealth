@@ -1,33 +1,88 @@
 {% extends 'main.html' %}
 
 {% block title %}
-{{ leader.team_name }} Details
-{% endblock title %}\
+Team Review
+{% endblock title %}
 
 {% block extracss %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'w1995934/Main.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'w1995934/team_detail.css' %}">
+<link rel="stylesheet" href="{% static 'w1995934/Main.css' %}">
+<link rel="stylesheet" href="{% static 'w1995934/team_detail.css' %}">
 {% endblock extracss %}
 
+{% block javascript %}
+<script src="teamdetail.js"></script>
+{% endblock javascript %}
+
 {% block content %}
+{% load static %}
 <div class="team-detail-container">
-    <h1>{{ leader.team_name }}</h1>
-    <div class="leader-info">
-        <h2>Team Leader</h2>
-        <p>Name: {{ leader.user.get_full_name }}</p>
-        <p>Email: {{ leader.user.email }}</p>
+    <h1>{{ team.teamName  }} Team Summary</h1>
+    <div class="content-grid">
+
+        <div class="employee-list">
+            <h2>Team Members</h2>
+            <div class="member-card" data-member-id="employee.id">
+                {% for member in members %}
+                <div>{{member.user.get_full_name}}</div>
+                {% empty %}
+                <p class="empty-state">No team members found</p>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="session-list" id="session-container">
+            <div class="session-card" data-session-id="session.id">
+                {% if average_rating %}
+                <div class="team-average">
+                    <h3>Team Average Rating: {{ average_rating }} / 2</h3>
+                </div>
+                {% else %}
+                <div class="team-average">
+                    <h3>No reviews have been made</h3>
+                </div>
+                {% endif %}
+            </div>
+            <div class="session-card" data-session-id="session.id">
+                {% if leader %}
+                <div class="detail-section">
+                    <h3>Team Leader</h3>
+                    <ul>
+                        <li>{{ leader.get_full_name }}</li>
+                        <li>Email: {{ leader.email }}</li>
+                    </ul>
+                </div>
+                {% else %}
+                <div>
+                    <ul>
+                        <li>No leader assigned</li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
-    <div class="team-members">
-        <h2>Team Members</h2>
-        <ul>
-            {% for member in leader.team.members.all %}
-            <li>{{ member.get_full_name }}</li>
-            {% empty %}
-            <li>No members assigned yet</li>
-            {% endfor %}
-        </ul>
+    <div class="comparison-container">
+        <h2>Team Performance Overview</h2>
+        <div class="comparison-grid">
+            <div class="comparison red">
+                <span class="comparison-icon">🔴</span>
+                <span class="comparison-value">{{ red_count }}</span>
+                <span class="comparison-label">Needs Improvement</span>
+            </div>
+            <div class="comparison yellow">
+                <span class="comparison-icon">🟡</span>
+                <span class="comparison-value">{{ yellow_count }}</span>
+                <span class="comparison-label">Average</span>
+            </div>
+            <div class="comparison green">
+                <span class="comparison-icon">🟢</span>
+                <span class="comparison-value">{{ green_count }}</span>
+                <span class="comparison-label">Excellent</span>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}

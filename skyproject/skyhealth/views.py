@@ -10,7 +10,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
-
 # Home Page for app, accessible for all users
 def home(request):
     return render(request, 'skyhealth/w1995934/home.html')
@@ -45,6 +44,7 @@ def signup(request):
         form = CreateUserForm()
     return render(request, 'skyhealth/w2011525/register.html', {'form': form})
 
+
 # Displays all cards that a User can create a review for
 # Requires User to be logged in
 @login_required
@@ -52,6 +52,7 @@ def cards(request):
     cards = Card.objects.all()
     context = {'cards': cards}
     return render(request, 'skyhealth/cards.html', context)
+
 
 # Displays the specific card
 # Requires User to be logged in
@@ -63,12 +64,15 @@ def card(request, id):
                'split_description': split_description}
     return render(request, 'skyhealth/card.html', context)
 
+
 # View Users information, and is only able to view their own
 # Requires User to be logged in
 @login_required
 def profile_view(request):
     profile = Profile.objects.get(user=request.user)
-    return render(request, 'skyhealth/w2011525/profile.html', {'profile': profile, 'role': role_display_names(profile.role)})
+    return render(request, 'skyhealth/w2011525/profile.html',
+                  {'profile': profile, 'role': role_display_names(profile.role)})
+
 
 # Allows the User to Update their information
 # Requires User to be logged in
@@ -100,7 +104,8 @@ def updateprofile(request):
     else:
         # Returns the form with the users information
         user_form = UserForm(instance=request.user)
-    return render(request, updateprofilehtml, {'user_form': user_form,})
+    return render(request, updateprofilehtml, {'user_form': user_form, })
+
 
 # Logout user and redirects them to the Home screen with a message
 # Requires User to be logged in
@@ -202,7 +207,7 @@ def create_review(request, card_id):
 # The webpage displays all the teams in a department
 # Requires User to be logged in and to not be a engineer
 @login_required
-def teams_summary(request):
+def teams_summary(request, department_id):
     # Get User object
     profile = Profile.objects.get(user=request.user)
 
@@ -216,11 +221,8 @@ def teams_summary(request):
         messages.warning(request, "You currently are not in a Team.")
         return redirect('skyhealth_home')
 
-    # Get the Department from the users ID team ID
-    department = profile.teamID.depID
-
-    # Get all the teams that are under than department
-    teams = Team.objects.filter(depID=department)
+    # Get all the teams that are under the department from the ID
+    teams = Team.objects.filter(depID=department_id)
 
     # Gets all the data from each team, the team Name and its Team Leader
     team_data = []
@@ -238,3 +240,56 @@ def teams_summary(request):
         })
 
     return render(request, 'skyhealth/w1995934/TeamPage.html', {'team_data': team_data, 'department': department})
+
+# The webpage displays all teams memebers, rating, number of green,amber and red rating, and the team leaders information
+# Requires User to be logged in and to not be a engineer
+@login_required
+def team_detail(request, team_id):
+    profile = Profile.objects.get(user=request.user)
+
+    # Stops engineers from accessing the page
+    if profile.role == 'ENGINEER':
+        messages.warning(request, "You can not see this page.")
+        return redirect('skyhealth_home')
+
+    # Get the team object from id
+    team = Team.objects.filter(id=team_id).first()
+
+    # Validate the team exists
+    if not team:
+        messages.warning(request, "Team not found.")
+        return redirect('skyhealth_teams_summary')
+
+    # Get team leader
+    leader = Profile.objects.filter(teamID=team, role='TEAM_LEADER').first()
+
+    # Get all team members
+    members = Profile.objects.filter(teamID=team)
+
+    # Get all the reviews from the team memebers
+    # Count the number of reviews
+    team_reviews = Review.objects.filter(userID__teamID=team)
+    red_count = team_reviews.filter(answer=0).count()
+    yellow_count = team_reviews.filter(answer=1).count()
+    green_count = team_reviews.filter(answer=2).count()
+    total_reviews = red_count + yellow_count + green_count
+
+    # Getting the average rating of the review, from 0-2
+    # Where 0 is bad and 2 is good
+    if total_reviews > 0:
+        average_rating = round(team_reviews.aggregate(Avg('answer'))['answer__avg'], 1)
+    else:
+        average_rating = None
+
+    # Data for the webpage
+    context = {
+        'team': team,
+        'leader': leader.user if leader else None,
+        'members': members,
+        'average_rating': average_rating,
+        'red_count': red_count,
+        'yellow_count': yellow_count,
+        'green_count': green_count,
+    }
+
+    return render(request, 'skyhealth/w1995934/team_detail.html', context)
