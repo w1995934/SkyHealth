@@ -130,11 +130,10 @@ def reviews(request):
     user_reviews = Review.objects.filter(userID=profile)
     total_reviews = user_reviews.count()
 
+    # Getting the average rating of the review, from 0-2
+    # Where 0 is bad and 2 is good
     if total_reviews > 0:
         average_rating = round(user_reviews.aggregate(Avg('answer'))['answer__avg'], 1)
-
-        # Convert from 0-2 scale to 1-3 scale
-        average_rating = average_rating + 1
     else:
         average_rating = None
 
