@@ -1,9 +1,11 @@
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
+from django.db.models import Avg
 from django.shortcuts import render, redirect
 
-from .forms import UserForm, CreateUserForm
-from .models import Card, Profile
+from .forms import UserForm, CreateUserForm, CreateReviewForm
+from .helper import split_card_description
+from .models import Card, Profile, Review
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -56,7 +58,7 @@ def cards(request):
 @login_required
 def card(request, id):
     card = Card.objects.get(id=id)
-    split_description = [part.strip() for part in card.cardDetail.split('Or.') if part.strip()]
+    split_description = split_card_description(card)
     context = {'card': card,
                'split_description': split_description}
     return render(request, 'skyhealth/card.html', context)
@@ -65,7 +67,7 @@ def card(request, id):
 # Requires User to be logged in
 @login_required
 def profile_view(request):
-    profile = Profile.objects.get(user__username=request.user.username)
+    profile = Profile.objects.get(user=request.user)
     return render(request, 'skyhealth/profile.html', {'profile': profile})
 
 # Allows the User to Update their information
@@ -88,6 +90,7 @@ def updateprofile(request):
             messages.error(request, "Fields cannot be empty.")
             return render(request, updateprofilehtml, {'user_form': user_form})
 
+        # Saves the form and updates the database with it
         if user_form.is_valid():
             user_form.save()
             messages.success(request, f'Your profile was successfully updated!')
@@ -106,3 +109,91 @@ def logout_user(request):
     logout(request)
     messages.success(request, "You Were Logged Out!")
     return redirect('skyhealth_home')
+
+
+# The reviews that the Engineer and Team Leader can make
+# Requires User to be logged in and be in a team
+@login_required
+def reviews(request):
+    profile = request.user.profile
+
+    if profile.role not in ['ENGINEER', 'TEAM_LEADER']:
+        messages.warning(request, "Only Engineers and Team Leaders can create reviews.")
+        return redirect('skyhealth_home')
+
+    if not profile.teamID:
+        messages.warning(request, "You currently are not in a Team.")
+        return redirect('skyhealth_home')
+
+    cards = Card.objects.all()
+
+    user_reviews = Review.objects.filter(userID=profile)
+    total_reviews = user_reviews.count()
+
+    if total_reviews > 0:
+        average_rating = round(user_reviews.aggregate(Avg('answer'))['answer__avg'], 1)
+
+        # Convert from 0-2 scale to 1-3 scale
+        average_rating = average_rating + 1
+    else:
+        average_rating = None
+
+    return render(request, 'skyhealth/reviews.html', {'cards': cards, 'average_rating': average_rating})
+
+@login_required
+def create_review(request, card_id):
+    # Get the User object
+    profile = Profile.objects.get(user=request.user)
+
+    # Checks if a valid User
+    if profile.role not in ['ENGINEER', 'TEAM_LEADER']:
+        messages.warning(request, "Only Engineers and Team Leaders can create reviews.")
+        return redirect('skyhealth_home')
+
+    # Checks if User has a team
+    if not profile.teamID:
+        messages.warning(request, "You are not in a team and cannot make reviews.")
+        return redirect('skyhealth_home')
+
+    # Gets the card and review data
+    card = Card.objects.get(id=card_id)
+    split_description = split_card_description(card)
+    existing_review = Review.objects.filter(cardID=card, userID=profile).first()
+
+    # Checks if it's a POST or GET request
+    if request.method == 'POST':
+        #
+        form = CreateReviewForm(request.POST)
+
+        if form.is_valid():
+            rating = form.cleaned_data['rating']
+
+            # Updates Review
+            if existing_review:
+                existing_review.answer = rating
+                existing_review.save()
+                messages.success(request, "Review updated!")
+            # Creates Review from form
+            else:
+                Review.objects.create(
+                    answer=rating,
+                    cardID=card,
+                    userID=profile)
+                messages.success(request, "Review created!")
+
+            return redirect('skyhealth_reviews')
+        else:
+            # Form validation failed
+            messages.error(request, "Please select a valid rating.")
+    else:
+        # Provides a Empty form if no review is found
+        # Sets the rating from the found review
+        initial = {'rating': existing_review.answer} if existing_review else None
+        form = CreateReviewForm(initial=initial)
+
+    # Returns the card and its split description and review information and also the form
+    return render(request, 'skyhealth/createreview.html', {
+        'card': card,
+        'split_description': split_description,
+        'form': form,
+        'existing_review': existing_review})

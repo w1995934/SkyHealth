@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Reviews
+{% endblock title %}
+
+{% block extrastyle %}
+<style>
+    body{
+        padding-top: 70px
+    }
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div>
+    <h1>Hi {{user.first_name}}</h1>
+    <p>Your average review is: {{average_rating}}</p>
+</div>
+
+{% for card in cards %}
+<div>
+    <a href="{% url 'skyhealth_create_review' card.id %}">{{card.cardTitle}}</a>
+</div>
+{% endfor %}
+{% endblock content %}

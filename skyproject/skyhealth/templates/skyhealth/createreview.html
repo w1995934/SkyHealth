@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Reviews
+{% endblock title %}
+
+{% block extrastyle %}
+<style>
+    body{
+        padding-top: 70px
+    }
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div>
+    <h1>Review for: {{card.cardTitle}}</h1>
+    <h2>Card Description:</h2>
+    {% for part in split_description %}
+    <div>{{ part }}</div>
+    {% endfor %}
+</div>
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+
+        <div>
+            <label>
+                <input type="radio" name="rating" value="0" {% if existing_review and existing_review.answer == 0 %}checked{% endif %}>
+                0 - Not applicable
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="radio" name="rating" value="1" {% if existing_review and existing_review.answer == 1 %}checked{% endif %}>
+                1 - Needs improvement
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="radio" name="rating" value="2" {% if existing_review and existing_review.answer == 2 %}checked{% endif %}>
+                2 - Meets expectations
+            </label>
+        </div>
+
+        <button type="submit">Submit Review</button>
+    </form>
+</div>
+{% endblock content %}

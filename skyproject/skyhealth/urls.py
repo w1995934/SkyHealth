@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from django.contrib.auth import views as log_views
 
 urlpatterns = [
     path('', views.home, name="skyhealth_home"),
@@ -11,4 +10,6 @@ urlpatterns = [
     path('updateprofile/', views.updateprofile, name="skyhealth_updateprofile"),
     path('cards/', views.cards, name="skyhealth_cards"),
     path('cards/<int:id>/', views.card, name="skyhealth_card"),
+    path('reviews/', views.reviews, name="skyhealth_reviews"),
+    path('reviews/<int:card_id>/create/', views.create_review, name="skyhealth_create_review"),
 ]
