@@ -14,7 +14,7 @@
             <a href="/admin">Admin Panel</a>
         </h2>
         {% endif %}
-        {% if user.profile.role == 'TEAM_LEADER' %}
+        {% if user.profile.role == 'TEAM_LEADER' and user.profile.teamID %}
         <h2 class="navbar-item">
             <a href="{% url 'skyhealth_teams_summary' user.profile.teamID.depID.id%}">Teams Summary</a>
         </h2>
