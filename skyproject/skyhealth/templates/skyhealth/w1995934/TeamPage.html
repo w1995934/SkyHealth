@@ -8,34 +8,34 @@
     <link rel="stylesheet" href="teamsum.css">
 </head>
 <body>
-    <div class="container">
-        <nav class="navigation">
-            <ul>
-                <img src="Skylogo.png" class="logo">
-                <h1 class="LogoText">Health</h1>
-                <li><a href="">Home</a></li>
-                <li><a href="">Login</a></li>
-                <li><a href="">User Profile</a></li>
-                <li><a href="">Admin</a></li>
-            </ul>
-        </nav>
-    </div>
+<div class="container">
+    <nav class="navigation">
+        <ul>
+            <img src="Skylogo.png" class="logo">
+            <h1 class="LogoText">Health</h1>
+            <li><a href="">Home</a></li>
+            <li><a href="">Login</a></li>
+            <li><a href="">User Profile</a></li>
+            <li><a href="">Admin</a></li>
+        </ul>
+    </nav>
+</div>
 
-    <div class="team-summary-container">
-        <h1>Team Leaders</h1>
-        
-        <div class="leaders-grid">
-            {% for leader in leaders %}
-            <div class="leader-card">
-                <h3>{{ leader.team_name }}</h3>
-                <p>Leader: {{ leader.user.get_full_name }}</p>
-                <button onclick="location.href='{% url 'team_detail' leader.id %}'">
-                    View Summary
-                </button>
-            </div>
-            {% empty %}
-            {% endfor %}
+<div class="team-summary-container">
+    <h1>Team Leaders</h1>
+
+    <div class="leaders-grid">
+        {% for leader in leaders %}
+        <div class="leader-card">
+            <h3>{{ leader.team_name }}</h3>
+            <p>Leader: {{ leader.user.get_full_name }}</p>
+            <button onclick="location.href='{% url 'team_detail' leader.id %}'">
+                View Summary
+            </button>
         </div>
+        {% empty %}
+        {% endfor %}
     </div>
+</div>
 </body>
 </html>
