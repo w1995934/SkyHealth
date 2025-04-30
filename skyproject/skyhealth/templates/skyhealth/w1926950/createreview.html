@@ -1,50 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SkyCare Survey question 2</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'w1926950/style.css' %}" />
-</head>
-<body>
-  <div class="container">
-    <header>
-      <img src="sky-logo.png" alt="SkyCare Logo" class="logo" />
-      <div class="home-icon">🏠</div>
-    </header>
+{% extends 'main.html' %}
 
-    <h2>Question 2: Do you enjoy working with your team and find your work engaging?</h2>
+{% block title %}
+SkyCare Survey
+{% endblock title %}
 
-    <div class="content">
-      <div class="faces">
-        <button class="face-button happy">
-          😊
-          <span>The team is motivated, and work feels exciting and rewarding.</span>
-        </button>
-        <button class="face-button neutral">
-          😐
-          <span>Work is fine, but not particularly enjoyable.</span>
-        </button>
-        <button class="face-button sad">
-          ☹️
-          <span>Work feels stressful or unengaging, and motivation is low.</span>
-        </button>
-      </div>
+{% block extracss %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'w1926950/style.css' %}"/>
+{% endblock extracss %}
 
-      <div class="bar">
-        <div class="bar-segment low"></div>
-        <div class="bar-segment low"></div>
-      </div>
-    </div>
+{% block content %}
+<div class="container">
+    <h2>
+      <h1>Review for: {{card.cardTitle}}</h1>
+    <h2>Card Description:</h2>
+    {% for part in split_description %}
+    <ul>{{ part }}</ul>
+    {% endfor %}
+    </h2>
 
-    <div class="navigation">
-        <button onclick="goToPrev()">&larr;</button>
-        <button onclick="goToNext()">&rarr;</button>
-      </div>
-  </div>
+    <form id="surveyForm" method="POST">
+        {% csrf_token %}
 
-  <script>
+        <div class="content">
+            <div class="faces">
+                <label class="face-button happy">
+                    <input type="radio" name="rating" value="2" {% if existing_review and existing_review.answer == 2 %}checked{% endif %}>
+                    😊 <span>2 - Meets expectations</span>
+                </label>
+                <label class="face-button neutral">
+                    <input type="radio" name="rating" value="1" {% if existing_review and existing_review.answer == 1 %}checked{% endif %}>
+                    😐 <span>1 - Needs improvement</span>
+                </label>
+                <label class="face-button sad">
+                    <input type="radio" name="rating" value="0" {% if existing_review and existing_review.answer == 0 %}checked{% endif %}>
+                    ☹️ <span>0 - Not applicable</span>
+                </label>
+            </div>
+
+            <!-- Right: Vertical bar -->
+            <div class="bar">
+                <div class="bar-segment low"></div>
+            </div>
+        </div>
+
+<!--        <input type="hidden" name="question_id" value="1"/>-->
+
+        <div class="navigation">
+            <button type="submit">Submit</button>
+<!--            <button type="button" onclick="goToNext()">&rarr;</button>-->
+        </div>
+    </form>
+</div>
+
+
+<script>
     const buttons = document.querySelectorAll('.face-button');
     buttons.forEach(button => {
       button.addEventListener('click', () => {
@@ -58,8 +68,7 @@
   }
 
   function goToNext() {
-    window.location.href = 'question3.html'; 
+    window.location.href = 'question2.html';
   }
-  </script>
-</body>
-</html>
+</script>
+{% endblock content %}

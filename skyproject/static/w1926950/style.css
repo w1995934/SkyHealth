@@ -3,7 +3,6 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4a8d1;
     color: black;
-    padding-top: 70px
   }
   
   .container {
@@ -36,13 +35,44 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 40px;
+    margin-top: 20px;
   }
   
   .faces {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
+    max-width: 600px;
   }
+  
+  .bar {
+    width: 60px;
+    height: 360px;
+    background-color: #1e1e1e;
+    border-radius: 30px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+  }
+  
+  .bar-segment {
+    height: 30px;
+    margin: 2px 0;
+    border-radius: 10px;
+  }
+  
+  .low {
+    background-color: #3cbc44;
+  }
+  
+  .navigation {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  
   
   .face-button {
     display: flex;
@@ -86,26 +116,6 @@ body {
     color: red;
   }
   
-  .bar {
-    width: 60px;
-    height: 360px;
-    background-color: #1e1e1e;
-    border-radius: 30px;
-    padding: 6px;
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-start;
-  }
-  
-  .bar-segment {
-    height: 30px;
-    margin: 2px 0;
-    border-radius: 10px;
-  }
-  
-  .low {
-    background-color: #3cbc44;
-  }
   
   .navigation {
     margin-top: 40px;
@@ -115,12 +125,18 @@ body {
   }
   
   .navigation button {
-    font-size: 24px;
-    background: none;
-    border: 2px solid black;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #0078d4; /* or your brand color */
+    color: white;
+    font-size: 16px;
+    border-radius: 8px; /* NOT 50% */
     cursor: pointer;
+    min-width: 100px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .navigation button:hover {
+    background-color: #005fa3;
   }
   
